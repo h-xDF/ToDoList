@@ -1,6 +1,7 @@
 package ru.raralux.todolist.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,19 +35,19 @@ class RecyclerViewAdapter(val context: Context, var data: MutableList<Task>?): R
         fun bindItem(task: Task?) {
             itemView.txtName.text = task?.name
             itemView.txtNo.text = task?.taskId.toString()
-            //itemView.txtNo.text = "123"
             itemView.txtDesc.text = task?.description
             itemView.checkbox.isChecked = task?.visible?:false
 
             itemView.setOnLongClickListener {
+                Log.d("test", "delete task: ${task.toString()}")
                 AppDatabase.deleteTask(AppDatabase.getInstance(itemView.context), task)
                 true
             }
 
             itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) {
-                    //TODO
-                }
+                task?.visible = isChecked
+                Log.d("test", "update task: ${task.toString()}")
+                AppDatabase.updateTask(AppDatabase.getInstance(itemView.context), task!!)
             }
         }
     }

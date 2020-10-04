@@ -59,5 +59,15 @@ abstract class AppDatabase : RoomDatabase() {
                 }
             }.execute()
         }
+
+        @SuppressLint("StaticFieldLeak")
+        fun updateTask(mydata: AppDatabase, task: Task) {
+            object : AsyncTask<Void, Void, Void>() {
+                override fun doInBackground(vararg voids: Void): Void? {
+                    mydata.taskDao().updateTask(task)
+                    return null
+                }
+            }.execute()
+        }
     }
 }
