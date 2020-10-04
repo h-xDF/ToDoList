@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_task_layout.view.*
 import ru.raralux.todolist.R
+import ru.raralux.todolist.database.AppDatabase
 import ru.raralux.todolist.database.Task
 
 class RecyclerViewAdapter(val context: Context, var data: MutableList<Task>?): RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
@@ -32,8 +33,21 @@ class RecyclerViewAdapter(val context: Context, var data: MutableList<Task>?): R
     class ViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         fun bindItem(task: Task?) {
             itemView.txtName.text = task?.name
-            itemView.txtNo.setText(Integer.valueOf(task?.taskId!!))
+            itemView.txtNo.text = task?.taskId.toString()
+            //itemView.txtNo.text = "123"
+            itemView.txtDesc.text = task?.description
             itemView.checkbox.isChecked = task?.visible?:false
+
+            itemView.setOnLongClickListener {
+                AppDatabase.deleteTask(AppDatabase.getInstance(itemView.context), task)
+                true
+            }
+
+            itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    //TODO
+                }
+            }
         }
     }
 }

@@ -1,11 +1,12 @@
 package ru.raralux.todolist.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM Task")
-    fun getAllTasks(): MutableList<Task>
+    fun getAllTasks(): LiveData<MutableList<Task>>
 
     @Query("SELECT * FROM Task WHERE task_id = :id")
     fun getTaskById(id: Int): Task?
