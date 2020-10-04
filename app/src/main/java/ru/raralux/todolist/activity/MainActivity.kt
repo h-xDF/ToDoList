@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var add: FloatingActionButton
 
-    var list: MutableList<Task>? = null
+    private var list: MutableList<Task>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         adapter = RecyclerViewAdapter(this, list)
         recyclerView.adapter = adapter
 
-        viewModel = ViewModelProviders.of(this).get(TaskViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
         viewModel.fetchAllTask().observe(this,
             Observer<MutableList<Task>> { t ->
                 Log.v("OnChanged","OnChanged!!")
@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
         add.setOnClickListener {
             openDialog()
         }
-
     }
 
     private fun openDialog() {
@@ -81,6 +80,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         dialog.show()
-        dialog.getWindow()?.setAttributes(lp)
+        dialog.window?.attributes = lp
     }
 }
