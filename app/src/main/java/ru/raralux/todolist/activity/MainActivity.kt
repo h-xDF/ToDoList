@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
                 else -> {
                     val task = Task(title.text.toString(), title.text.toString(), false)
-                    AppDatabase.insertData(AppDatabase.getInstance(this), task)
+                    AppDatabase.insertData(AppDatabase.invoke(this), task)
                     dialog.dismiss()
                 }
             }

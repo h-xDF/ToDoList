@@ -10,7 +10,7 @@ class TaskViewModel(application: Application): AndroidViewModel(application) {
     var list: LiveData<MutableList<Task>>
 
     init {
-        list = AppDatabase.getAllTask(AppDatabase.getInstance(this.getApplication()))
+        list = AppDatabase.getAllTask(AppDatabase.invoke(this.getApplication()))
     }
 
     fun fetchAllTask(): LiveData<MutableList<Task>> = list

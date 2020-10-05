@@ -40,14 +40,14 @@ class RecyclerViewAdapter(val context: Context, var data: MutableList<Task>?): R
 
             itemView.setOnLongClickListener {
                 Log.d("test", "delete task: ${task.toString()}")
-                AppDatabase.deleteTask(AppDatabase.getInstance(itemView.context), task)
+                AppDatabase.deleteTask(AppDatabase.invoke(itemView.context), task)
                 true
             }
 
             itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 task?.visible = isChecked
                 Log.d("test", "update task: ${task.toString()}")
-                AppDatabase.updateTask(AppDatabase.getInstance(itemView.context), task!!)
+                AppDatabase.updateTask(AppDatabase.invoke(itemView.context), task!!)
             }
         }
     }
