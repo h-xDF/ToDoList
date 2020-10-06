@@ -5,7 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_task_layout.view.*
 import ru.raralux.todolist.R
 import ru.raralux.todolist.database.AppDatabase
@@ -40,14 +44,36 @@ class RecyclerViewAdapter(val context: Context, var data: MutableList<Task>?): R
 
             itemView.setOnLongClickListener {
                 Log.d("test", "delete task: ${task.toString()}")
-                AppDatabase.deleteTask(AppDatabase.invoke(itemView.context), task)
+                //AppDatabase.deleteTask(AppDatabase.invoke(itemView.context), task)
+
+                Completable
+                    .fromAction{ AppDatabase.invoke(itemView.context).taskDao().deleteTask(task) }
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {Toast.makeText(itemView.context,
+                            "Successfully! deleted task: id=${task?.taskId}", Toast.LENGTH_SHORT).show()},
+                        {Toast.makeText(itemView.context,
+                            "error: delete task id=${task?.taskId}", Toast.LENGTH_SHORT).show()}
+                    )
                 true
             }
 
             itemView.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 task?.visible = isChecked
                 Log.d("test", "update task: ${task.toString()}")
-                AppDatabase.updateTask(AppDatabase.invoke(itemView.context), task!!)
+                //AppDatabase.updateTask(AppDatabase.invoke(itemView.context), task!!)
+
+                Completable
+                    .fromAction{ AppDatabase.invoke(itemView.context).taskDao().updateTask(task!!)}
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {Toast.makeText(itemView.context,
+                            "Successfully! updated task: id=${task!!.taskId}", Toast.LENGTH_SHORT).show()},
+                        {Toast.makeText(itemView.context,
+                            "error: update task id=${task?.taskId}", Toast.LENGTH_SHORT).show()}
+                    )
             }
         }
     }

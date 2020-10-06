@@ -14,9 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import ru.raralux.todolist.R
 import ru.raralux.todolist.adapter.RecyclerViewAdapter
-import ru.raralux.todolist.database.AppDatabase
 import ru.raralux.todolist.database.Task
 import ru.raralux.todolist.viewModel.TaskViewModel
 
@@ -74,7 +76,17 @@ class MainActivity : AppCompatActivity() {
 
                 else -> {
                     val task = Task(title.text.toString(), description.text.toString(), false)
-                    AppDatabase.insertData(AppDatabase.invoke(this), task)
+                    //AppDatabase.insertData(AppDatabase.invoke(this), task)
+                    Completable
+                        .fromAction{ viewModel.addTask(task) }
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                            {Toast.makeText(this,
+                                "task added successfully!", Toast.LENGTH_SHORT).show()},
+                            {Toast.makeText(this,
+                                "error: add task", Toast.LENGTH_SHORT).show()}
+                        )
                     dialog.dismiss()
                 }
             }

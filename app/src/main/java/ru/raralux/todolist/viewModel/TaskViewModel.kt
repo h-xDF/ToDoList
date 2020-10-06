@@ -7,11 +7,13 @@ import ru.raralux.todolist.database.AppDatabase
 import ru.raralux.todolist.database.Task
 
 class TaskViewModel(application: Application): AndroidViewModel(application) {
-    var list: LiveData<MutableList<Task>>
 
-    init {
-        list = AppDatabase.getAllTask(AppDatabase.invoke(this.getApplication()))
+    fun fetchAllTask(): LiveData<MutableList<Task>> {
+        return AppDatabase.invoke(this.getApplication()).taskDao().getAllTasks()
     }
 
-    fun fetchAllTask(): LiveData<MutableList<Task>> = list
+
+    fun addTask(task: Task) {
+        AppDatabase.invoke(this.getApplication()).taskDao().addTask(task)
+    }
 }

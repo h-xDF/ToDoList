@@ -5,3 +5,4 @@
 - RecyclerView
 - LiveData
 - MVVM
+- RxJava
