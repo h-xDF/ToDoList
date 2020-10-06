@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                         , Toast.LENGTH_SHORT).show()
 
                 else -> {
-                    val task = Task(title.text.toString(), title.text.toString(), false)
+                    val task = Task(title.text.toString(), description.text.toString(), false)
                     AppDatabase.insertData(AppDatabase.invoke(this), task)
                     dialog.dismiss()
                 }
