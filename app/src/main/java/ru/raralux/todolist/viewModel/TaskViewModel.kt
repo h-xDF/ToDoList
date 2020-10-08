@@ -12,7 +12,6 @@ class TaskViewModel(application: Application): AndroidViewModel(application) {
         return AppDatabase.invoke(this.getApplication()).taskDao().getAllTasks()
     }
 
-
     fun addTask(task: Task) {
         AppDatabase.invoke(this.getApplication()).taskDao().addTask(task)
     }
